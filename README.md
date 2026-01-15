@@ -23,16 +23,26 @@ Para evitarlo, se diseña una cuenta de emergencia altamente protegida, sin MFA 
 4. Definición de un protocolo de uso seguro.
 
 ---
-
 ## 📸 Evidencias
-Las siguientes capturas demuestran la implementación correcta:
 
-| Evidencia | Descripción |
-|--------|------------|
-| `images/00-usuario-breakglass.png` | La cuenta break-glass existe y es tipo **Miembro** |
-| `images/01-rol-global-admin.png` | La cuenta tiene rol **Administrador global** |
-| `images/02-ca-exclusion.png` | La cuenta está excluida de MFA por Acceso Condicional |
+### 1️⃣ Cuenta break-glass creada
+La cuenta **emergencia.admin** existe en el tenant Zapata-Cloud y es de tipo *Member* (no Guest), lo que permite asignarle roles administrativos.
 
+![Usuario de emergencia](images/01-user-created.png)
+
+---
+
+### 2️⃣ Rol Global Administrator asignado
+La cuenta break-glass tiene el rol **Global Administrator**, lo que le permite recuperar el tenant ante cualquier bloqueo.
+
+![Rol Global Admin](images/02-global-admin.png)
+
+---
+
+### 3️⃣ Exclusión en Acceso Condicional
+La cuenta de emergencia está excluida de las políticas de Acceso Condicional (MFA), evitando un bloqueo total del tenant.
+
+![Exclusión CA](images/03-ca-exclusion.png)
 ---
 
 ## ✅ Checklist de control
