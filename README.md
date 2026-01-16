@@ -23,6 +23,10 @@ Para evitarlo, se diseña una cuenta de emergencia altamente protegida, sin MFA 
 4. Definición de un protocolo de uso seguro.
 
 ---
+
+>🔐 Los valores de seguridad predeterminados (Security Defaults) fueron deshabilitados para evitar conflictos y permitir la gestión de la seguridad mediante políticas de Acceso Condicional.
+
+---
 ## 📸 Evidencias
 
 ### 1️⃣ Cuenta break-glass creada
