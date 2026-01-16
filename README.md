@@ -49,9 +49,9 @@ La cuenta de emergencia está excluida de las políticas de Acceso Condicional (
 
 > Se marca solo tras validar cada punto en el portal.
 
-- [ ] La política de Acceso Condicional exige MFA a usuarios normales  
-- [ ] La cuenta break-glass está excluida  
-- [ ] La cuenta break-glass no se usa para trabajo diario  
+- [X] La política de Acceso Condicional exige MFA a usuarios normales  
+- [X] La cuenta break-glass está excluida  
+- [X] La cuenta break-glass no se usa para trabajo diario  
 
 ---
 
