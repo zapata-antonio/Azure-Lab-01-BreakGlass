@@ -1,4 +1,4 @@
-# Lab 01 — Continuidad del Tenant (Cuenta de Emergencia - Break-Glass)
+# 🧪Lab 01 — Continuidad del Tenant (Cuenta de Emergencia - Break-Glass)
 
 ## 🎯 Objetivo
 Garantizar el acceso administrativo al tenant de Azure en caso de fallo del MFA, bloqueo accidental del administrador o caída del sistema de identidad.
