@@ -1,47 +1,84 @@
-# Lab 01 — Cuenta de emergencia (Break-Glass) en Microsoft Entra ID
+# Lab 01 — Resiliencia de Identidad: Cuenta de Emergencia (Break-Glass)
 
-## Por qué hice este lab
-Estoy montando un portfolio práctico de Azure/IAM y, antes de tocar cosas delicadas como **Conditional Access** y **MFA**, quería cubrir lo más básico: **no quedarme fuera del tenant por un error mío**.
-
-Este lab es literalmente “seguro de vida” para cuando estás aprendiendo y pruebas políticas.
+## Por qué hice este laboratorio
+Antes de tocar políticas sensibles como **Conditional Access** y **MFA**, el mayor riesgo es quedarme fuera del tenant por un error de configuración (administrative lock-out).  
+Este laboratorio es mi “seguro de vida” técnico: una cuenta de emergencia preparada para **recuperar el acceso** si el MFA falla, si bloqueo a los administradores o si configuro mal una directiva.
 
 ## Objetivo
-Tener una cuenta de emergencia que me permita recuperar el tenant si:
-- me bloqueo por una política de CA mal configurada,
-- falla el MFA,
-- o accidentalmente dejo fuera a los administradores.
+Garantizar acceso administrativo al tenant en escenarios críticos:
+- Fallo de MFA
+- Bloqueo accidental de administradores por CA
+- Configuraciones de seguridad mal aplicadas (CA / Identity Protection)
 
-## Qué hice 
-1) Creé un usuario dedicado para emergencias: `break-glass emergency account`  
-2) Le asigné el rol **Administrador global** (solo para recuperación).  
-3) En Conditional Access, lo **excluí** de la política de MFA para evitar un lock-out total.  
-4) Deshabilité **Security Defaults** porque en este tenant estoy gestionando la seguridad con CA y me estorbaba para configurar/validar.
+---
 
-> Nota: en mi caso la directiva está en **“Solo informe”** (report-only) mientras reviso que no me bloqueo. La idea es pasarla a **Activado** cuando esté seguro.
+## Qué he implementado
 
-## Evidencias (hechas por mí en el portal)
+### 1) Cuenta Break-Glass dedicada
+He creado una cuenta **exclusiva para emergencias** (tipo *Member*):
 
-### 1) Usuario break-glass creado
-Se ve el usuario creado como *Miembro* (no Guest), lo que permite asignarle roles administrativos.
+- UPN: `breakglass.admin@zapatacloud.onmicrosoft.com`
+- Uso: **solo recuperación**, nunca para trabajo diario
 
-![Usuario de emergencia](images/01-user-created.png)
+**Evidencia**  
+![Cuenta break-glass](images/01-user-created.png)
 
-### 2) Rol Global Administrator asignado
-Se ve la cuenta break-glass dentro del rol **Administrador global**.
+---
 
+### 2) Rol Administrador Global
+A la cuenta break-glass le he asignado el rol **Global Administrator** para poder recuperar el tenant ante cualquier bloqueo.
+
+**Evidencia**  
 ![Rol Global Admin](images/02-global-admin.png)
 
-### 3) Exclusión en Acceso Condicional
-En la directiva de CA se ve la cuenta break-glass en “usuarios excluidos”.
+---
 
+### 3) Exclusión en Conditional Access (MFA)
+Para evitar un lock-out total, la cuenta break-glass está **excluida** de las directivas de Acceso Condicional que exigen MFA.
+
+**Evidencia**  
 ![Exclusión CA](images/03-ca-exclusion.png)
 
-## Cosas que tuve en cuenta (para que no sea “una cuenta sin MFA y ya”)
-- No es una cuenta para el día a día. Es para emergencias.
-- Contraseña larga/única y guardada fuera del tenant.
-- Sin licencias asignadas.
-- Revisión periódica: si hay un inicio de sesión con esta cuenta, se investiga sí o sí.
+---
 
-## Qué diría en una entrevista (como lo explicaría yo)
-“Antes de tocar Conditional Access, creo una cuenta break-glass. Le doy Global Admin solo para recuperación y la excluyo de la política de MFA para no depender de CA/MFA en una emergencia. La protejo con controles compensatorios (contraseña offline, cero uso diario y revisión de accesos). Así evito bloquear el tenant por un error de configuración mientras practico.”
+### 4) Monitorización: Log Analytics + Alerta por email
+Como la cuenta no tiene MFA, la protejo con controles compensatorios.  
+He configurado monitorización para que **cualquier uso de la cuenta** genere señal y notificación:
+
+- **Entra ID → Configuración de diagnóstico**: envío de `SignInLogs` y `AuditLogs` a un **Log Analytics Workspace**.
+- **Alerta en Azure Monitor**: regla que dispara si aparece un evento de inicio de sesión de la cuenta break-glass y envía email mediante un **Action Group**.
+
+**Evidencia**  
+![Alerta break-glass](images/04-breakglass-alert.png)
+
+---
+
+## Checklist de control (validado)
+- [x] Existe una cuenta break-glass tipo *Member*
+- [x] Tiene rol **Global Administrator**
+- [x] Está excluida de las políticas de CA/MFA
+- [x] No tiene licencias asignadas
+- [x] Se monitoriza su uso con **Log Analytics + alerta por email**
+- [x] No se usa para el día a día
+
+---
+
+## Buenas prácticas aplicadas (controles compensatorios)
+- Contraseña larga/única guardada fuera del tenant (offline)
+- Cero uso diario (solo emergencias)
+- Sin licencias asignadas
+- Alerta inmediata por email ante cualquier intento de inicio de sesión
+
+---
+
+## Qué explicaría en una entrevista
+“Antes de aplicar Conditional Access o MFA, implemento una cuenta break-glass con rol Global Admin para evitar un lock-out total. No se trata solo de crear un usuario sin MFA: la excluyo de CA, la protejo con una contraseña offline y monitorizo su uso. Si esa cuenta se usa, lo considero una emergencia real o un incidente y se investiga inmediatamente.”
+
+---
+
+## Estructura de evidencias
+- `images/01-user-created.png`
+- `images/02-global-admin.png`
+- `images/03-ca-exclusion.png`
+- `images/04-breakglass-alert.png`
 
