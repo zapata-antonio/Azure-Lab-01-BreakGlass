@@ -46,11 +46,13 @@ Como la cuenta no tiene MFA, la protejo con controles compensatorios.
 He configurado monitorización para que **cualquier uso de la cuenta** genere señal y notificación:
 
 - **Entra ID → Configuración de diagnóstico**: envío de `SignInLogs` y `AuditLogs` a un **Log Analytics Workspace**.
-- **Alerta en Azure Monitor**: regla que dispara si aparece un evento de inicio de sesión de la cuenta break-glass y envía email mediante un **Action Group**.
+- **Azure Monitor (Alertas)**: regla que dispara si aparece un evento de inicio de sesión de la cuenta break-glass y envía email mediante un **Action Group**.
 
-**Evidencia**  
-![Alerta break-glass](images/04-breakglass-alert.png)
+**Evidencia (diagnóstico Entra → Log Analytics)**  
+![Configuración de diagnóstico Entra](images/04-entra-config-diagnostico.png)
 
+**Evidencia (alerta por uso de break-glass)**  
+![Alerta break-glass](images/05-alerta-breakglass.png)
 ---
 
 ## Checklist de control (validado)
@@ -75,10 +77,4 @@ He configurado monitorización para que **cualquier uso de la cuenta** genere se
 “Antes de aplicar Conditional Access o MFA, implemento una cuenta break-glass con rol Global Admin para evitar un lock-out total. No se trata solo de crear un usuario sin MFA: la excluyo de CA, la protejo con una contraseña offline y monitorizo su uso. Si esa cuenta se usa, lo considero una emergencia real o un incidente y se investiga inmediatamente.”
 
 ---
-
-## Estructura de evidencias
-- `images/01-user-created.png`
-- `images/02-global-admin.png`
-- `images/03-ca-exclusion.png`
-- `images/04-breakglass-alert.png`
 
